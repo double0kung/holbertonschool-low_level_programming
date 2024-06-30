@@ -1,5 +1,5 @@
 #include "main.h"
-/** main - Entry point*/
+/** main - Entry pointmain - Prints "_putchar" followed by a new line*/
 int main(void)
 {
 char str[] = "_putchar";
