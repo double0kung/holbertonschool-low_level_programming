@@ -1,10 +1,12 @@
+#include "main.h"
 int main(void)
 {
-char text[] = "_putchar";
-int i;
-for (i = 0; text[i] != '\0'; i++)
+char str[] = "_putchar";
+int i = 0;
+while (str[i] != '\0')
 {
-_putchar(text[i]);
+_putchar(str[i]);
+i++;
 }
 _putchar('\n');
 return (0);
