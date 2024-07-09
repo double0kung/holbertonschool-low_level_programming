@@ -16,7 +16,7 @@ return (_sqrt_helper(n, 0));
 /**
  * _sqrt_helper - helper function to find the square root.
  * @n: the number to calculate the square root of.
- * @i: the current divisor.
+ * @i: the current divisor to check.
  * Return: the natural square root, or -1 if no natural square root exists.
  */
 int _sqrt_helper(int n, int i)
