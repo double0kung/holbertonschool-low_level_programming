@@ -4,6 +4,7 @@
  * is_prime_number - returns 1 if the input integer is a prime number,
  * otherwise return 0.
  * @n: the number to check.
+ * @i: divisor.
  * Return: 1 if n is a prime number, 0 otherwise.
  */
 int is_prime_helper(int n, int i);
