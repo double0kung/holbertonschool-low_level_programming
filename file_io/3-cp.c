@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
+#include <string.h>
 
 #define BUFFER_SIZE 1024
 
@@ -18,23 +20,10 @@ void error_exit(int code, const char *format, const char *arg)
 }
 
 /**
- * close_file - closes a file descriptor and handles errors
- * @fd: file descriptor to close
- */
-void close_file(int fd)
-{
-	if (close(fd) == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
-		exit(100);
-	}
-}
-
-/**
  * main - copies the content of a file to another file
  * @argc: argument count
  * @argv: argument vector
- * Return: 0 on success
+ * Return: 0 on success, appropriate error code on failure
  */
 int main(int argc, char *argv[])
 {
@@ -52,7 +41,7 @@ int main(int argc, char *argv[])
 	fd_to = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, mode);
 	if (fd_to == -1)
 	{
-		close_file(fd_from);
+		close(fd_from);
 		error_exit(99, "Error: Can't write to %s\n", argv[2]);
 	}
 
@@ -61,21 +50,21 @@ int main(int argc, char *argv[])
 		wr = write(fd_to, buffer, rd);
 		if (wr == -1 || wr != rd)
 		{
-			close_file(fd_from);
-			close_file(fd_to);
+			close(fd_from);
+			close(fd_to);
 			error_exit(99, "Error: Can't write to %s\n", argv[2]);
 		}
 	}
 
 	if (rd == -1)
 	{
-		close_file(fd_from);
-		close_file(fd_to);
+		close(fd_from);
+		close(fd_to);
 		error_exit(98, "Error: Can't read from file %s\n", argv[1]);
 	}
 
-	close_file(fd_from);
-	close_file(fd_to);
+	if (close(fd_from) == -1 || close(fd_to) == -1)
+		error_exit(100, "Error: Can't close fd\n", "");
 
 	return (0);
 }
