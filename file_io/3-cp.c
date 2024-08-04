@@ -18,6 +18,18 @@ void error_exit(int code, const char *message, const char *arg)
 }
 
 /**
+ * error_exit_fd - Print error message for file descriptor and exit
+ * @code: Exit code
+ * @message: Error message format string
+ * @fd: File descriptor
+ */
+void error_exit_fd(int code, const char *message, int fd)
+{
+	dprintf(STDERR_FILENO, message, fd);
+	exit(code);
+}
+
+/**
  * main - Copy content of one file to another
  * @argc: Argument count
  * @argv: Argument vector
@@ -51,10 +63,10 @@ int main(int argc, char *argv[])
 		error_exit(98, "Error: Can't read from file %s\n", argv[1]);
 
 	if (close(fd_from) == -1)
-		error_exit(100, "Error: Can't close fd %d\n", fd_from);
+		error_exit_fd(100, "Error: Can't close fd %d\n", fd_from);
 
 	if (close(fd_to) == -1)
-		error_exit(100, "Error: Can't close fd %d\n", fd_to);
+		error_exit_fd(100, "Error: Can't close fd %d\n", fd_to);
 
 	return (0);
 }
