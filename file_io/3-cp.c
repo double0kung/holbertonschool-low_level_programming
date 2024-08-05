@@ -42,11 +42,9 @@ int main(int argc, char *argv[])
 	}
 	rd = read(fd_from, buffer, BUFFER_SIZE);
 	if (rd == -1)
-	{
-		close(fd_from);
-		close(fd_to);
 		error_exit(98, "Error: Can't read from file %s\n", argv[1]);
-	}
+	if (rd == 0)
+		error_exit(98, "Error: %s is empty\n", argv[1]);
 	while (rd > 0)
 	{
 		wr = write(fd_to, buffer, rd);
