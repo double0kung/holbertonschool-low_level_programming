@@ -40,12 +40,7 @@ int main(int argc, char *argv[])
 		close(fd_from);
 		error_exit(99, "Error: Can't write to %s\n", argv[2]);
 	}
-	rd = read(fd_from, buffer, BUFFER_SIZE);
-	if (rd == -1)
-		error_exit(98, "Error: Can't read from file %s\n", argv[1]);
-	if (rd == 0)
-		error_exit(98, "Error: %s is empty\n", argv[1]);
-	while (rd > 0)
+	while ((rd = read(fd_from, buffer, BUFFER_SIZE)) > 0)
 	{
 		wr = write(fd_to, buffer, rd);
 		if (wr == -1 || wr != rd)
@@ -54,13 +49,12 @@ int main(int argc, char *argv[])
 			close(fd_to);
 			error_exit(99, "Error: Can't write to %s\n", argv[2]);
 		}
-		rd = read(fd_from, buffer, BUFFER_SIZE);
-		if (rd == -1)
-		{
-			close(fd_from);
-			close(fd_to);
-			error_exit(98, "Error: Can't read from file %s\n", argv[1]);
-		}
+	}
+	if (rd == -1)
+	{
+		close(fd_from);
+		close(fd_to);
+		error_exit(98, "Error: Can't read from file %s\n", argv[1]);
 	}
 	if (close(fd_from) == -1)
 		error_exit(100, "Error: Can't close fd %d\n", argv[1]);
